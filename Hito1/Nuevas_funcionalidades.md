@@ -14,7 +14,7 @@
 + Montalvo Garcia Peter Jhonatan 
 
 <div align="center">
-  <h1> Informe de Presentación del Trabajo: Modelamiento de Red Social para Seguimiento de Influencers  </h1>
+  <h1> Informe de Presentación del Trabajo: Nuevas funcionalidades al Modelamiento de Red Social para Seguimiento de Influencers  </h1>
 </div>
 
 ## 1. Introducción
