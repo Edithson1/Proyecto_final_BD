@@ -1,7 +1,7 @@
 
 # Creación de una Red Social en Neo4j
 
-Este documento detalla las consultas utilizadas para construir y estructurar una red social en Neo4j. Cada sección incluye una explicación de las operaciones realizadas.
+Se detalla las consultas utilizadas para construir y estructurar nuestra red social en Neo4j. Cada sección incluye una explicación de las operaciones realizadas.
 
 ## Creación de Nodos
 
