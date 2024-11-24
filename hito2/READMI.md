@@ -71,9 +71,17 @@ MATCH (p:Persona {idPersona: 3}), (pub:Publicacion {idPublicacion: 1}) CREATE (p
 Se añade un comentario realizado por una persona sobre una publicación:
 
 ```cypher
-MATCH (p:Persona {idPersona: 1}), (pub:Publicacion {idPublicacion: 1}) CREATE (p)-[:COMENTA {texto: '¡Gran publicación!', fechaComentario: datetime()}]->(pub);
-MATCH (p:Persona {idPersona: 1}), (pub:Publicacion {idPublicacion: 1}) CREATE (p)-[:COMENTA {texto: '¡Me encanta este tema!', fechaComentario: datetime('2024-11-22T15:30:00')}]->(pub);
-MATCH (p:Persona {idPersona: 2}), (pub:Publicacion {idPublicacion: 1}) CREATE (p)-[:COMENTA {texto: 'Muy interesante.', fechaComentario: datetime('2024-11-22T16:00:00')}]->(pub);
+MATCH (p:Persona {idPersona: 1}), (pub:Publicacion {idPublicacion: 1})
+CREATE (comentario1:Comentario {texto: '¡Gran publicación!', fechaComentario: datetime()})
+CREATE (p)-[:ESCRIBE]->(comentario1)-[:PERTENECE_A]->(pub);
+
+MATCH (p:Persona {idPersona: 1}), (pub:Publicacion {idPublicacion: 1})
+CREATE (comentario2:Comentario {texto: '¡Me encanta este tema!', fechaComentario: datetime('2024-11-22T15:30:00')})
+CREATE (p)-[:ESCRIBE]->(comentario2)-[:PERTENECE_A]->(pub);
+
+MATCH (p:Persona {idPersona: 2}), (pub:Publicacion {idPublicacion: 1})
+CREATE (comentario3:Comentario {texto: 'Muy interesante.', fechaComentario: datetime('2024-11-22T16:00:00')})
+CREATE (p)-[:ESCRIBE]->(comentario3)-[:PERTENECE_A]->(pub);
 ```
 
 ### Relación de Influencer
@@ -87,33 +95,31 @@ MATCH (i:Influencer {idInfluencer: 1}), (pub:Publicacion {idPublicacion: 1}) CRE
 ## Organización de Intereses
 
 ### Creación de Tipos de Intereses
-Se crean nodos que agrupan diferentes tipos de intereses:
-
+Se crean nodos que representan a los intereses con el tipo de interes qeu es:
 ```cypher
-CREATE (:TipoInteres {nombre: 'Generales'});
-CREATE (:TipoInteres {nombre: 'Tecnológicos'});
-CREATE (:TipoInteres {nombre: 'Entretenimiento'});
-CREATE (:TipoInteres {nombre: 'Deportivos'});
-CREATE (:TipoInteres {nombre: 'Estilo de Vida'});
-CREATE (:TipoInteres {nombre: 'Cocina y Gastronomía'});
-CREATE (:TipoInteres {nombre: 'Especializados'});
-CREATE (:TipoInteres {nombre: 'Creativos'});
-CREATE (:TipoInteres {nombre: 'En Tendencia'});
-```
+CREATE (:Interes {nombre: 'Tecnología', categoria: 'Generales'}),
+       (:Interes {nombre: 'Arte', categoria: 'Generales'}),
+       (:Interes {nombre: 'Música', categoria: 'Generales'}),
+       (:Interes {nombre: 'Inteligencia Artificial', categoria: 'Tecnológicos'}),
+       (:Interes {nombre: 'Desarrollo Web', categoria: 'Tecnológicos'}),
+       (:Interes {nombre: 'Blockchain', categoria: 'Tecnológicos'}),
+       (:Interes {nombre: 'Anime', categoria: 'Entretenimiento'}),
+       (:Interes {nombre: 'Cine', categoria: 'Entretenimiento'}),
+       (:Interes {nombre: 'Videojuegos', categoria: 'Entretenimiento'}),
+       (:Interes {nombre: 'Fútbol', categoria: 'Deportivos'}),
+       (:Interes {nombre: 'Baloncesto', categoria: 'Deportivos'}),
+       (:Interes {nombre: 'Yoga', categoria: 'Deportivos'}),
+       (:Interes {nombre: 'Salud y bienestar', categoria: 'Estilo de Vida'}),
+       (:Interes {nombre: 'Minimalismo', categoria: 'Estilo de Vida'}),
+       (:Interes {nombre: 'Comida vegana', categoria: 'Cocina y Gastronomía'}),
+       (:Interes {nombre: 'Repostería', categoria: 'Cocina y Gastronomía'}),
+       (:Interes {nombre: 'Astronomía', categoria: 'Especializados'}),
+       (:Interes {nombre: 'Filosofía', categoria: 'Especializados'}),
+       (:Interes {nombre: 'Pintura', categoria: 'Creativos'}),
+       (:Interes {nombre: 'Diseño gráfico', categoria: 'Creativos'}),
+       (:Interes {nombre: 'NFTs', categoria: 'En Tendencia'}),
+       (:Interes {nombre: 'Criptomonedas', categoria: 'En Tendencia'});
 
-### Relación entre Intereses y Tipos de Intereses
-Se conecta cada interés con su categoría correspondiente:
-
-```cypher
-MATCH (a:TipoInteres {nombre: 'Generales'}) CREATE (:Interes {nombre: 'Tecnología'})-[:PERTENECE_A]->(a), (:Interes {nombre: 'Arte'})-[:PERTENECE_A]->(a), (:Interes {nombre: 'Música'})-[:PERTENECE_A]->(a);
-MATCH (b:TipoInteres {nombre: 'Tecnológicos'}) CREATE (:Interes {nombre: 'Inteligencia Artificial'})-[:PERTENECE_A]->(b), (:Interes {nombre: 'Desarrollo Web'})-[:PERTENECE_A]->(b), (:Interes {nombre: 'Blockchain'})-[:PERTENECE_A]->(b);
-MATCH (c:TipoInteres {nombre: 'Entretenimiento'}) CREATE (:Interes {nombre: 'Anime'})-[:PERTENECE_A]->(c), (:Interes {nombre: 'Cine'})-[:PERTENECE_A]->(c), (:Interes {nombre: 'Videojuegos'})-[:PERTENECE_A]->(c);
-MATCH (d:TipoInteres {nombre: 'Deportivos'}) CREATE (:Interes {nombre: 'Fútbol'})-[:PERTENECE_A]->(d), (:Interes {nombre: 'Baloncesto'})-[:PERTENECE_A]->(d), (:Interes {nombre: 'Yoga'})-[:PERTENECE_A]->(d);
-MATCH (e:TipoInteres {nombre: 'Estilo de Vida'}) CREATE (:Interes {nombre: 'Salud y bienestar'})-[:PERTENECE_A]->(e), (:Interes {nombre: 'Minimalismo'})-[:PERTENECE_A]->(e);
-MATCH (f:TipoInteres {nombre: 'Cocina y Gastronomía'}) CREATE (:Interes {nombre: 'Comida vegana'})-[:PERTENECE_A]->(f), (:Interes {nombre: 'Repostería'})-[:PERTENECE_A]->(f);
-MATCH (g:TipoInteres {nombre: 'Especializados'}) CREATE (:Interes {nombre: 'Astronomía'})-[:PERTENECE_A]->(g), (:Interes {nombre: 'Filosofía'})-[:PERTENECE_A]->(g);
-MATCH (h:TipoInteres {nombre: 'Creativos'}) CREATE (:Interes {nombre: 'Pintura'})-[:PERTENECE_A]->(h), (:Interes {nombre: 'Diseño gráfico'})-[:PERTENECE_A]->(h);
-MATCH (i:TipoInteres {nombre: 'En Tendencia'}) CREATE (:Interes {nombre: 'NFTs'})-[:PERTENECE_A]->(i), (:Interes {nombre: 'Criptomonedas'})-[:PERTENECE_A]->(i);
 ```
 ### Relacionar personas con intereses
 Se conecta a las personas con los temas que le interesan:
@@ -141,8 +147,8 @@ MATCH (p:Publicacion {idPublicacion: 1}), (i:Interes {nombre: 'Tecnología'}) CR
 Se definen eventos dentro de la red social:
 
 ```cypher
-CREATE (:Evento {idEvento: 1, nombre: 'Conferencia de Tecnología', descripcion: 'Un evento para discutir las últimas tendencias en tecnología', fecha: date('2024-12-10')});
-CREATE (:Evento {idEvento: 2, nombre: 'Hackathon', descripcion: 'Competencia de programación intensiva', fecha: date('2024-12-15')});
+CREATE (:Evento {idEvento: 1, nombre: 'Conferencia de Tecnología', descripcion: 'Un evento para discutir las últimas tendencias en tecnología', fecha: datetime('2024-12-22T16:00:00')});
+CREATE (:Evento {idEvento: 2, nombre: 'Hackathon', descripcion: 'Competencia de programación intensiva', fecha: datetime('2024-12-22T16:00:00')});
 ```
 
 ### Relación de Participación en Eventos
