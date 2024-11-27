@@ -192,5 +192,5 @@ CREATE (p)-[:MIRA_CONTENIDO]->(v);
 ```
 
 ## Vista del avance la base de datos no relacional Neo4j:
-![image](https://github.com/user-attachments/assets/c7447c7a-cd4d-465a-b2de-1104eea2e892)
+![image](https://github.com/user-attachments/assets/ce0a734c-56bd-4445-9e85-10f6d9a65857)
 
